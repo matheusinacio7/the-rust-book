@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug program",
+      "cargo": {
+        "args": [
+          "run"
+        ]
+      },
+      "args": ["pattern", "filepath.txt"],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
