@@ -45,9 +45,11 @@ pub struct Config {
 }
 
 impl Config {
-  pub fn build(args: &[String]) -> Result<Config, Box<dyn Error>> {
-      let pattern = args.get(1).ok_or("Must inform pattern")?.clone();
-      let file_path = args.get(2).ok_or("Must inform a file path")?.clone();
+  pub fn build(mut args: impl Iterator<Item = String>) -> Result<Config, Box<dyn Error>> {
+      args.next();
+
+      let pattern = args.next().ok_or("Must inform pattern")?.clone();
+      let file_path = args.next().ok_or("Must inform a file path")?.clone();
 
       let ignore_case = dbg!(env::var("IGNORE_CASE").is_ok());
 
