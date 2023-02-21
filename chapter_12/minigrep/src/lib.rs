@@ -4,15 +4,21 @@ use std::fs;
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
   let file_contents = fs::read_to_string(config.file_path)?;
 
-  for (i, line) in file_contents.lines().enumerate() {
-      println!("Line {}: {}", i, line);
+  for (i, line) in search(&config.pattern, &file_contents).iter().enumerate() {
+      println!("Line {}: {}", i + 1, line);
   }
 
   Ok(())
 }
 
 pub fn search<'a>(pattern: &str, contents: &'a str) -> Vec<&'a str> {
-  vec![]
+  let mut lines = vec![];
+  for line in contents.lines() {
+    if line.contains(pattern) {
+      lines.push(line);
+    }
+  }
+  lines
 }
 
 pub struct Config {
@@ -41,7 +47,7 @@ Rust:
 safe, fast, productive.
 Pick three.";
 
-    assert_eq!(vec!["safe, fast, productive"], search(query, contents));
+    assert_eq!(vec!["safe, fast, productive."], search(query, contents));
   }
 }
 
