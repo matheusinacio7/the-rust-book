@@ -5,13 +5,10 @@
       "type": "lldb",
       "request": "launch",
       "name": "Debug program",
-      "cargo": {
-        "args": [
-          "run"
-        ]
-      },
-      "args": ["pattern", "filepath.txt"],
-      "cwd": "${workspaceFolder}"
+      "program": "${workspaceFolder}/target/debug/minigrep",
+      "args": ["boDy", "poem.txt"],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "build"
     }
   ]
 }

@@ -1,10 +1,16 @@
 use std::error::Error;
-use std::fs;
+use std::{fs, env};
 
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
   let file_contents = fs::read_to_string(config.file_path)?;
 
-  for (i, line) in search(&config.pattern, &file_contents).iter().enumerate() {
+  let results = if config.ignore_case {
+    search_case_insensitive(&config.pattern, &file_contents)
+  } else {
+    search(&config.pattern, &file_contents)
+  };
+
+  for (i, line) in results.iter().enumerate() {
       println!("Line {}: {}", i + 1, line);
   }
 
@@ -35,6 +41,7 @@ pub fn search_case_insensitive<'a>(pattern: &str, contents: &'a str) -> Vec<&'a 
 pub struct Config {
   pub pattern: String,
   pub file_path: String,
+  pub ignore_case: bool,
 }
 
 impl Config {
@@ -42,7 +49,9 @@ impl Config {
       let pattern = args.get(1).ok_or("Must inform pattern")?.clone();
       let file_path = args.get(2).ok_or("Must inform a file path")?.clone();
 
-      Ok(Config { pattern, file_path })
+      let ignore_case = dbg!(env::var("IGNORE_CASE").is_ok());
+
+      Ok(Config { pattern, file_path, ignore_case })
   }
 }
 
